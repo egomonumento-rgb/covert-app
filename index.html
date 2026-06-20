@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covert - Encrypted Messaging</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
+            <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v1.1 - Asegurado</span>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 max-w-md mx-auto w-full space-y-6">
+        
+        <div class="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800">
+            <button id="btn-tab-cifrar" class="w-1/2 py-2 text-sm font-medium rounded-md bg-zinc-800 text-white transition shadow" onclick="switchTab('cifrar')">
+                Ocultar Mensaje
+            </button>
+            <button id="btn-tab-descifrar" class="w-1/2 py-2 text-sm font-medium rounded-md text-zinc-400 hover:text-white transition" onclick="switchTab('descifrar')">
+                Revelar Mensaje
+            </button>
+        </div>
+
+        <div class="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Contraseña del Chat (Llave Privada)</label>
+            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: obra_chapinero_2026">
+        </div>
+
+        <section id="section-cifrar" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Mensaje Real y Secreto</label>
+                <textarea id="mensaje-real" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-600" placeholder="Escribe lo que quieres camuflar aquí..."></textarea>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Contexto de Fachada</label>
+                <select id="contexto-fachada" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300">
+                    <option value="FAMILIAR">🏠 Familiar / Cotidiano</option>
+                    <option value="TRABAJO">💼 Corporativo / Oficina</option>
+                    <option value="OFICIOS/CONSTRUCCIÓN">🛠️ Oficios / Construcción</option>
+                </select>
+            </div>
+
+            <button onclick="procesarCifrado()" class="w-full bg-white text-black font-semibold text-sm py-3 rounded-lg hover:bg-zinc-200 transition duration-200 shadow-lg">
+                Generar Texto Encubierto
+            </button>
+
+            <div id="resultado-cifrado-container" class="hidden space-y-2 pt-2">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Texto Listo para Enviar por WhatsApp</label>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm text-zinc-300 break-words">
+                    <p id="resultado-cifrado-texto" class="select-all bg-zinc-950 p-2 rounded border border-zinc-800 font-mono text-xs text-zinc-400"></p>
+                    <button onclick="copiarAlPortapapeles()" class="mt-3 w-full bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 py-2 rounded border border-zinc-700 transition">
+                        Copiar Mensaje Completo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-descifrar" class="hidden space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Pegar Mensaje de WhatsApp</label>
+                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-600" placeholder="Pega la frase con el enlace que recibiste..."></textarea>
+            </div>
+
+            <button onclick="procesarDescifrado()" class="w-full bg-zinc-800 text-white font-semibold text-sm py-3 rounded-lg hover:bg-zinc-700 border border-zinc-700 transition duration-200">
+                Revelar Mensaje Real
+            </button>
+
+            <div id="resultado-descifrar-container" class="hidden space-y-2 pt-2">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-emerald-500 font-bold">⚠️ MENSAJE DESENCRIPTADO</label>
+                <div class="bg-emerald-950/30 border border-emerald-900/50 rounded-lg p-4 text-sm text-emerald-300 break-words">
+                    <p id="resultado-descifrar-texto" class="font-medium"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="p-4 text-center text-zinc-600 text-xs border-t border-zinc-900">
+        Covert Security Labs &copy; 2026. Cifrado local AES-256 activo.
+    </footer>
+
+    <script>
+        const API_KEY = 'AQ.Ab8RN6It3RFqF6JnU9bdmhMzec7qcgkitqEYY_itxwaDeMnADg';
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+        function switchTab(tab) {
+            const tabCifrar = document.getElementById('btn-tab-cifrar');
+            const tabDescifrar = document.getElementById('btn-tab-descifrar');
+            const secCifrar = document.getElementById('section-cifrar');
+            const secDescifrar = document.getElementById('section-descifrar');
+
+            if (tab === 'cifrar') {
+                tabCifrar.className = "w-1/2 py-2 text-sm font-medium rounded-md bg-zinc-800 text-white transition shadow";
+                tabDescifrar.className = "w-1/2 py-2 text-sm font-medium rounded-md text-zinc-400 hover:text-white transition";
+                secCifrar.classList.remove('hidden');
+                secDescifrar.classList.add('hidden');
+            } else {
+                tabDescifrar.className = "w-1/2 py-2 text-sm font-medium rounded-md bg-zinc-800 text-white transition shadow";
+                tabCifrar.className = "w-1/2 py-2 text-sm font-medium rounded-md text-zinc-400 hover:text-white transition";
+                secDescifrar.classList.remove('hidden');
+                secCifrar.classList.add('hidden');
+            }
+        }
+
+        function copiarAlPortapapeles() {
+            const texto = document.getElementById('resultado-cifrado-texto').innerText;
+            navigator.clipboard.writeText(texto);
+            alert('¡Mensaje copiado con éxito!');
+        }
+
+        async function llamarGemini(jsonPayload) {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: JSON.stringify(jsonPayload) }] }]
+                })
+            });
+            const data = await response.json();
+            const textoLimpio = data.candidates[0].content.parts[0].text.trim().replace(/```json/g, "").replace(/```/g, "");
+            return JSON.parse(textoLimpio);
+        }
+
+        async function procesarCifrado() {
+            const msgReal = document.getElementById('mensaje-real').value;
+            const password = document.getElementById('chat-password').value;
+            const contexto = document.getElementById('contexto-fachada').value;
+
+            if(!msgReal || !password) return alert('Por favor ingresa el mensaje secreto y la contraseña del chat');
+            
+            document.getElementById('resultado-cifrado-container').classList.remove('hidden');
+            document.getElementById('resultado-cifrado-texto').innerText = "Cifrando de forma segura...";
+
+            try {
+                const mensajeCifradoLocal = CryptoJS.AES.encrypt(msgReal, password).toString();
+
+                const payload = {
+                    accion: "cifrar",
+                    mensaje_real: mensajeCifradoLocal,
+                    contexto: contexto
+                };
+
+                const respuestaAI = await llamarGemini(payload);
+                document.getElementById('resultado-cifrado-texto').innerText = respuestaAI.resultado;
+            } catch (error) {
+                document.getElementById('resultado-cifrado-texto').innerText = "Error al generar el camuflaje.";
+                console.error(error);
+            }
+        }
+
+        async function procesarDescifrado() {
+            const textoCamuflado = document.getElementById('texto-camuflado-input').value;
+            const password = document.getElementById('chat-password').value;
+
+            if(!textoCamuflado || !password) return alert('Ingresa el texto recibido y la contraseña del chat');
+
+            document.getElementById('resultado-descifrar-container').classList.remove('hidden');
+            document.getElementById('resultado-descifrar-texto').innerText = "Removiendo fachada...";
+
+            try {
+                const payload = {
+                    accion: "descifrar",
+                    texto_camuflado: textoCamuflado
+                };
+
+                const respuestaAI = await llamarGemini(payload);
+                const textoCifradoLocal = respuestaAI.resultado;
+
+                const bytes = CryptoJS.AES.decrypt(textoCifradoLocal, password);
+                const mensajeOriginal = bytes.toString(CryptoJS.enc.Utf8);
+
+                if (!mensajeOriginal) {
+                    document.getElementById('resultado-descifrar-texto').innerText = "❌ Contraseña incorrecta o mensaje corrupto. No se pudo revelar.";
+                } else {
+                    document.getElementById('resultado-descifrar-texto').innerText = mensajeOriginal;
+                }
+            } catch (error) {
+                document.getElementById('resultado-descifrar-texto').innerText = "❌ Error al procesar el descifrado.";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
