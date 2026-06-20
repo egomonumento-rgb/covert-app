@@ -12,7 +12,7 @@
     <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
-            <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v1.1 - Asegurado</span>
+            <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v1.2 - Local Seguro</span>
         </div>
     </header>
 
@@ -29,7 +29,7 @@
 
         <div class="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-1">
             <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Contraseña del Chat (Llave Privada)</label>
-            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: obra_chapinero_2026">
+            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: clave_secreta_123">
         </div>
 
         <section id="section-cifrar" class="space-y-4">
@@ -41,9 +41,9 @@
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Contexto de Fachada</label>
                 <select id="contexto-fachada" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300">
-                    <option value="FAMILIAR">🏠 Familiar / Cotidiano</option>
-                    <option value="TRABAJO">💼 Corporativo / Oficina</option>
-                    <option value="OFICIOS/CONSTRUCCIÓN">🛠️ Oficios / Construcción</option>
+                    <option value="CONSTRUCCION">🛠️ Oficios / Construcción y Presupuestos</option>
+                    <option value="TRABAJO">💼 Corporativo / Oficina / Reportes</option>
+                    <option value="FAMILIAR">🏠 Familiar / Cotidiano / Mensajes de casa</option>
                 </select>
             </div>
 
@@ -65,7 +65,7 @@
         <section id="section-descifrar" class="hidden space-y-4">
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Pegar Mensaje de WhatsApp</label>
-                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-600" placeholder="Pega la frase con el enlace que recibiste..."></textarea>
+                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-600" placeholder="Pega el mensaje camuflado completo aquí..."></textarea>
             </div>
 
             <button onclick="procesarDescifrado()" class="w-full bg-zinc-800 text-white font-semibold text-sm py-3 rounded-lg hover:bg-zinc-700 border border-zinc-700 transition duration-200">
@@ -83,12 +83,21 @@
     </main>
 
     <footer class="p-4 text-center text-zinc-600 text-xs border-t border-zinc-900">
-        Covert Security Labs &copy; 2026. Cifrado local AES-256 activo.
+        Covert Security Labs &copy; 2026. Procesamiento local criptográfico activo.
     </footer>
 
     <script>
-        const API_KEY = 'AQ.Ab8RN6It3RFqF6JnU9bdmhMzec7qcgkitqEYY_itxwaDeMnADg';
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+        const PREFIXES = {
+            CONSTRUCCION: ["Revisando los avances de obra, encontramos que el ", "Confirmado el replanteo, el presupuesto para el ", "De acuerdo a los planos DWG recibidos, el ", "Siguiendo la programación del cronograma, el "],
+            TRABAJO: ["Estimado equipo, adjunto el reporte mensual donde el ", "De acuerdo a la última reunión de gerencia, el ", "Para su revisión, el estado actual indica que el ", "Cumpliendo con los indicadores del trimestre, el "],
+            FAMILIAR: ["Hola, te cuento que ya todo quedó listo en casa, el ", "Te confirmo que para la cena de hoy el ", "Hablé con todos y confirmamos que el ", "No olvides pasar por el encargo, recuerda que el "]
+        };
+
+        const SUFFIXES = {
+            CONSTRUCCION: " requiere revisión urgente del mampuesto y las cantidades finales de material.",
+            TRABAJO: " queda bajo evaluación de la junta de control operativo para aprobación final.",
+            FAMILIAR: " ya está organizado y nos vemos allá a la hora acordada."
+        };
 
         function switchTab(tab) {
             const tabCifrar = document.getElementById('btn-tab-cifrar');
@@ -115,20 +124,7 @@
             alert('¡Mensaje copiado con éxito!');
         }
 
-        async function llamarGemini(jsonPayload) {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: JSON.stringify(jsonPayload) }] }]
-                })
-            });
-            const data = await response.json();
-            const textoLimpio = data.candidates[0].content.parts[0].text.trim().replace(/```json/g, "").replace(/```/g, "");
-            return JSON.parse(textoLimpio);
-        }
-
-        async function procesarCifrado() {
+        function procesarCifrado() {
             const msgReal = document.getElementById('mensaje-real').value;
             const password = document.getElementById('chat-password').value;
             const contexto = document.getElementById('contexto-fachada').value;
@@ -139,23 +135,25 @@
             document.getElementById('resultado-cifrado-texto').innerText = "Cifrando de forma segura...";
 
             try {
-                const mensajeCifradoLocal = CryptoJS.AES.encrypt(msgReal, password).toString();
-
-                const payload = {
-                    accion: "cifrar",
-                    mensaje_real: mensajeCifradoLocal,
-                    contexto: contexto
-                };
-
-                const respuestaAI = await llamarGemini(payload);
-                document.getElementById('resultado-cifrado-texto').innerText = respuestaAI.resultado;
+                // Cifrado AES-256 local
+                const encrypted = CryptoJS.AES.encrypt(msgReal, password).toString();
+                
+                // Generar Fachada Limpia
+                const prefixes = PREFIXES[contexto];
+                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                const suffix = SUFFIXES[contexto];
+                
+                // Formato de camuflaje: Prefijo + [CÓDIGO HEXADECIMAL O BASE64] + Sufijo
+                const msgCamuflado = `${prefix}[ID:${encrypted}]${suffix}`;
+                
+                document.getElementById('resultado-cifrado-texto').innerText = msgCamuflado;
             } catch (error) {
-                document.getElementById('resultado-cifrado-texto').innerText = "Error al generar el camuflaje.";
+                document.getElementById('resultado-cifrado-texto').innerText = "Error al generar el camuflaje local.";
                 console.error(error);
             }
         }
 
-        async function procesarDescifrado() {
+        function procesarDescifrado() {
             const textoCamuflado = document.getElementById('texto-camuflado-input').value;
             const password = document.getElementById('chat-password').value;
 
@@ -165,15 +163,18 @@
             document.getElementById('resultado-descifrar-texto').innerText = "Removiendo fachada...";
 
             try {
-                const payload = {
-                    accion: "descifrar",
-                    texto_camuflado: textoCamuflado
-                };
+                // Extraer el bloque cifrado dentro de los corchetes [ID: ...]
+                const match = textoCamuflado.match(/\[ID:(.*?)\]/);
+                
+                if (!match || !match[1]) {
+                    document.getElementById('resultado-descifrar-texto').innerText = "❌ Formato inválido. No se detectó ningún mensaje oculto seguro.";
+                    return;
+                }
 
-                const respuestaAI = await llamarGemini(payload);
-                const textoCifradoLocal = respuestaAI.resultado;
+                const encryptedBlock = match[1].trim();
 
-                const bytes = CryptoJS.AES.decrypt(textoCifradoLocal, password);
+                // Descifrado local AES
+                const bytes = CryptoJS.AES.decrypt(encryptedBlock, password);
                 const mensajeOriginal = bytes.toString(CryptoJS.enc.Utf8);
 
                 if (!mensajeOriginal) {
@@ -182,7 +183,7 @@
                     document.getElementById('resultado-descifrar-texto').innerText = mensajeOriginal;
                 }
             } catch (error) {
-                document.getElementById('resultado-descifrar-texto').innerText = "❌ Error al procesar el descifrado.";
+                document.getElementById('resultado-descifrar-texto').innerText = "❌ Error al procesar el descifrado local.";
                 console.error(error);
             }
         }
