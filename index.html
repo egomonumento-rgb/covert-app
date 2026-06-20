@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Covert - Encrypted Messaging</title>
+    
+    <!-- Configuración para convertir la Web en App de Celular -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="COVERT">
+    
+    <!-- Ícono de la aplicación generado mediante un SVG en código -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23131314'/><path d='M256 80 L380 130 V260 C380 345 326 418 256 440 C186 418 132 345 132 260 V130 Z' fill='none' stroke='%2300e676' stroke-width='24' stroke-linejoin='round'/><path d='M285 200 A 45 45 0 1 0 285 290' fill='none' stroke='%2300b0ff' stroke-width='28' stroke-linecap='round'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23131314'/><path d='M256 80 L380 130 V260 C380 345 326 418 256 440 C186 418 132 345 132 260 V130 Z' fill='none' stroke='%2300e676' stroke-width='24' stroke-linejoin='round'/><path d='M285 200 A 45 45 0 1 0 285 290' fill='none' stroke='%2300b0ff' stroke-width='28' stroke-linecap='round'/></svg>">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
@@ -11,8 +21,16 @@
 
     <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
-            <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v1.2 - Local Seguro</span>
+            <div class="flex items-center space-x-2">
+                <!-- Mini Logo Vectorial en la barra superior -->
+                <svg class="w-6 h-6" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="512" height="512" rx="100" fill="#131314"/>
+                    <path d="M256 80 L380 130 V260 C380 345 326 418 256 440 C186 418 132 345 132 260 V130 Z" fill="none" stroke="#00e676" stroke-width="28" stroke-linejoin="round"/>
+                    <path d="M285 200 A 45 45 0 1 0 285 290" fill="none" stroke="#00b0ff" stroke-width="32" stroke-linecap="round"/>
+                </svg>
+                <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
+            </div>
+            <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v1.3 - Seguro</span>
         </div>
     </header>
 
@@ -29,7 +47,7 @@
 
         <div class="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-1">
             <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Contraseña del Chat (Llave Privada)</label>
-            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: clave_secreta_123">
+            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: clave_obra_2026">
         </div>
 
         <section id="section-cifrar" class="space-y-4">
@@ -41,9 +59,9 @@
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Contexto de Fachada</label>
                 <select id="contexto-fachada" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300">
-                    <option value="CONSTRUCCION">🛠️ Oficios / Construcción y Presupuestos</option>
-                    <option value="TRABAJO">💼 Corporativo / Oficina / Reportes</option>
-                    <option value="FAMILIAR">🏠 Familiar / Cotidiano / Mensajes de casa</option>
+                    <option value="CONSTRUCCION">🛠️ Oficios / Construcción</option>
+                    <option value="TRABAJO">💼 Corporativo / Oficina</option>
+                    <option value="FAMILIAR">🏠 Familiar / Cotidiano</option>
                 </select>
             </div>
 
@@ -88,14 +106,29 @@
 
     <script>
         const PREFIXES = {
-            CONSTRUCCION: ["Revisando los avances de obra, encontramos que el ", "Confirmado el replanteo, el presupuesto para el ", "De acuerdo a los planos DWG recibidos, el ", "Siguiendo la programación del cronograma, el "],
-            TRABAJO: ["Estimado equipo, adjunto el reporte mensual donde el ", "De acuerdo a la última reunión de gerencia, el ", "Para su revisión, el estado actual indica que el ", "Cumpliendo con los indicadores del trimestre, el "],
-            FAMILIAR: ["Hola, te cuento que ya todo quedó listo en casa, el ", "Te confirmo que para la cena de hoy el ", "Hablé con todos y confirmamos que el ", "No olvides pasar por el encargo, recuerda que el "]
+            CONSTRUCCION: [
+                "Revisando los avances de obra, encontramos que el ", 
+                "Confirmado el replanteo, el presupuesto estimado para el ", 
+                "De acuerdo a los planos DWG recibidos, el ", 
+                "Siguiendo la programación pactada en el cronograma, el "
+            ],
+            TRABAJO: [
+                "Estimado equipo, adjunto el reporte mensual donde el ", 
+                "De acuerdo a lo concluido en la última reunión de gerencia, el ", 
+                "Para su revisión técnica, el estado analítico indica que el ", 
+                "Cumpliendo con los indicadores métricos del trimestre, el "
+            ],
+            FAMILIAR: [
+                "Hola, te cuento que ya todo quedó completamente listo en casa, el ", 
+                "Te confirmo que para la reunión de hoy el ", 
+                "Hablé con todos y confirmamos que el ", 
+                "No olvides pasar por el encargo, recuerda que el "
+            ]
         };
 
         const SUFFIXES = {
             CONSTRUCCION: " requiere revisión urgente del mampuesto y las cantidades finales de material.",
-            TRABAJO: " queda bajo evaluación de la junta de control operativo para aprobación final.",
+            TRABAJO: " queda bajo evaluación de la junta de control operativo para su aprobación final.",
             FAMILIAR: " ya está organizado y nos vemos allá a la hora acordada."
         };
 
@@ -135,17 +168,12 @@
             document.getElementById('resultado-cifrado-texto').innerText = "Cifrando de forma segura...";
 
             try {
-                // Cifrado AES-256 local
                 const encrypted = CryptoJS.AES.encrypt(msgReal, password).toString();
-                
-                // Generar Fachada Limpia
                 const prefixes = PREFIXES[contexto];
                 const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
                 const suffix = SUFFIXES[contexto];
                 
-                // Formato de camuflaje: Prefijo + [CÓDIGO HEXADECIMAL O BASE64] + Sufijo
                 const msgCamuflado = `${prefix}[ID:${encrypted}]${suffix}`;
-                
                 document.getElementById('resultado-cifrado-texto').innerText = msgCamuflado;
             } catch (error) {
                 document.getElementById('resultado-cifrado-texto').innerText = "Error al generar el camuflaje local.";
@@ -163,17 +191,13 @@
             document.getElementById('resultado-descifrar-texto').innerText = "Removiendo fachada...";
 
             try {
-                // Extraer el bloque cifrado dentro de los corchetes [ID: ...]
                 const match = textoCamuflado.match(/\[ID:(.*?)\]/);
-                
                 if (!match || !match[1]) {
                     document.getElementById('resultado-descifrar-texto').innerText = "❌ Formato inválido. No se detectó ningún mensaje oculto seguro.";
                     return;
                 }
 
                 const encryptedBlock = match[1].trim();
-
-                // Descifrado local AES
                 const bytes = CryptoJS.AES.decrypt(encryptedBlock, password);
                 const mensajeOriginal = bytes.toString(CryptoJS.enc.Utf8);
 
