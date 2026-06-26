@@ -15,84 +15,87 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
-<body id="app-body" class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between font-sans selection:bg-zinc-700 transition-colors duration-200">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between font-sans selection:bg-zinc-700">
 
-    <header id="app-header" class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur sticky top-0 z-50 transition-colors duration-200">
+    <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur sticky top-0 z-50">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <svg id="logo-icon" class="w-6 h-6 text-white transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                <!-- Logo SVG de Seguridad Nativo -->
+                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                 </svg>
-                <h1 id="brand-title" class="text-xl font-black tracking-wider text-white transition-colors duration-200">COVERT</h1>
+                <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
             </div>
-            
-            <div class="flex items-center space-x-2">
-                <button id="theme-toggle" onclick="toggleTheme()" class="text-sm bg-zinc-800 text-zinc-300 p-1.5 rounded-lg border border-zinc-700 hover:bg-zinc-700 transition active:scale-95">
-                    🌙
-                </button>
-                <span id="badge-version" class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700 transition-colors duration-200">v2.0</span>
-            </div>
+            <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v2.0 - Invisible</span>
         </div>
     </header>
 
     <main class="flex-grow p-4 max-w-md mx-auto w-full space-y-5">
         
-        <div id="tab-container" class="flex bg-zinc-900 p-1 rounded-xl border border-zinc-800 transition-colors duration-200">
+        <!-- Tabs Principales -->
+        <div class="flex bg-zinc-900 p-1 rounded-xl border border-zinc-800">
             <button id="btn-tab-cifrar" class="w-1/2 py-2.5 text-sm font-semibold rounded-lg bg-zinc-800 text-white transition shadow" onclick="switchTab('cifrar')">
                 Ocultar Mensaje
             </button>
-            <button id="btn-tab-descifrar" class="w-1/2 py-2.5 text-sm font-semibold rounded-lg text-zinc-400 hover:text-zinc-500 transition" onclick="switchTab('descifrar')">
+            <button id="btn-tab-descifrar" class="w-1/2 py-2.5 text-sm font-semibold rounded-lg text-zinc-400 hover:text-white transition" onclick="switchTab('descifrar')">
                 Revelar Mensaje
             </button>
         </div>
 
-        <div id="panel-password" class="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl space-y-1.5 transition-colors duration-200">
-            <label id="label-password" class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Contraseña del Chat (Llave Privada)</label>
-            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm focus:outline-none focus:border-zinc-500 text-zinc-300 font-mono transition-colors duration-200" placeholder="Ej: clave_secreta_2026">
+        <!-- Llave Compartida -->
+        <div class="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl space-y-1.5">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Contraseña del Chat (Llave Privada)</label>
+            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: clave_secreta_2026">
         </div>
 
+        <!-- SECCIÓN: OCULTAR -->
         <section id="section-cifrar" class="space-y-4">
             <div>
-                <label id="label-mensaje-real" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Mensaje Real y Secreto</label>
-                <textarea id="mensaje-real" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-500 resize-none text-zinc-300 placeholder-zinc-700 transition-colors duration-200" placeholder="Escribe el mensaje confidencial aquí..."></textarea>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Mensaje Real y Secreto</label>
+                <textarea id="mensaje-real" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-700" placeholder="Escribe el mensaje confidencial aquí..."></textarea>
             </div>
 
+            <!-- Selector Rápido de Categorías Móvil -->
             <div class="space-y-2">
-                <label id="label-contexto" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Selecciona Frase de Fachada</label>
-                <div id="cat-container" class="flex space-x-1.5 bg-zinc-900 p-1 rounded-lg border border-zinc-800 overflow-x-auto transition-colors duration-200">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Selecciona Frase de Fachada</label>
+                <div class="flex space-x-1.5 bg-zinc-900 p-1 rounded-lg border border-zinc-800 overflow-x-auto">
                     <button onclick="renderFrases('obra')" id="cat-obra" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap">🏗️ Obra</button>
-                    <button onclick="renderFrases('logistica')" id="cat-logistica" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-zinc-500 whitespace-nowrap">🚗 Camino</button>
-                    <button onclick="renderFrases('cotidiano')" id="cat-cotidiano" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-zinc-500 whitespace-nowrap">🛒 Cotidiano</button>
+                    <button onclick="renderFrases('logistica')" id="cat-logistica" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🚗 Camino</button>
+                    <button onclick="renderFrases('cotidiano')" id="cat-cotidiano" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🛒 Cotidiano</button>
                 </div>
                 
+                <!-- Contenedor Dinámico de Frases Rápidas -->
                 <div id="frases-container" class="grid grid-cols-1 gap-2 pt-1 max-h-48 overflow-y-auto">
-                    </div>
+                    <!-- Inyectado por JS -->
+                </div>
             </div>
 
+            <!-- Contenedor del Resultado -->
             <div id="resultado-cifrado-container" class="hidden space-y-2 pt-2">
-                <label id="label-resultado-cifrado" class="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Texto generado (El secreto ya está invisible adentro)</label>
-                <div id="panel-resultado-cifrado" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 space-y-3 transition-colors duration-200">
-                    <p id="resultado-cifrado-texto" class="bg-zinc-950 p-3 rounded-lg border border-zinc-800 text-sm text-zinc-300 break-words font-sans transition-colors duration-200"></p>
-                    <button id="btn-copiar-master" onclick="copiarAlPortapapeles()" class="w-full bg-white text-black font-bold text-xs py-2.5 rounded-lg hover:bg-zinc-200 transition shadow">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Texto generado (El secreto ya está invisible adentro)</label>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 space-y-3">
+                    <p id="resultado-cifrado-texto" class="bg-zinc-950 p-3 rounded-lg border border-zinc-800 text-sm text-zinc-300 break-words font-sans"></p>
+                    <button onclick="copiarAlPortapapeles()" class="w-full bg-white text-black font-bold text-xs py-2.5 rounded-lg hover:bg-zinc-200 transition shadow">
                         Copiar Mensaje Listo para WhatsApp
                     </button>
                 </div>
             </div>
         </section>
 
+        <!-- SECCIÓN: REVELAR -->
         <section id="section-descifrar" class="hidden space-y-4">
             <div>
-                <label id="label-mensaje-camuflado" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Pegar Mensaje de WhatsApp</label>
-                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-500 resize-none text-zinc-300 placeholder-zinc-700 transition-colors duration-200" placeholder="Pega el texto de la fachada tal cual como llegó..."></textarea>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Pegar Mensaje de WhatsApp</label>
+                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-700" placeholder="Pega el texto de la fachada tal cual como llegó..."></textarea>
             </div>
 
-            <button id="btn-revelar-master" onclick="procesarDescifrado()" class="w-full bg-zinc-800 text-white border border-zinc-700 font-semibold text-sm py-3 rounded-xl hover:bg-zinc-700 transition shadow">
+            <button onclick="procesarDescifrado()" class="w-full bg-zinc-800 text-white font-semibold text-sm py-3 rounded-xl hover:bg-zinc-700 border border-zinc-700 transition">
                 Extraer y Revelar Mensaje Oculto
             </button>
 
             <div id="resultado-descifrar-container" class="hidden space-y-2 pt-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-emerald-500">⚠️ MENSAJE REVELADO</label>
-                <div id="panel-resultado-descifrar" class="bg-emerald-950/20 border border-emerald-900/40 rounded-xl p-4 text-sm text-emerald-400 break-words transition-colors duration-200">
+                <div class="bg-emerald-950/20 border border-emerald-900/40 rounded-xl p-4 text-sm text-emerald-400 break-words">
                     <p id="resultado-descifrar-texto" class="font-medium tracking-wide"></p>
                 </div>
             </div>
@@ -100,15 +103,14 @@
 
     </main>
 
-    <footer id="app-footer" class="p-4 text-center text-zinc-600 text-[10px] border-t border-zinc-900 tracking-wider uppercase transition-colors duration-200">
+    <footer class="p-4 text-center text-zinc-600 text-[10px] border-t border-zinc-900 tracking-wider uppercase">
         Covert Labs v2.0 &bull; Cifrado Criptográfico Esteganográfico Local Activo
     </footer>
 
     <script>
-        // Configuración de temas y respuestas optimizadas
         const FACHADAS_TEMAS = {
             obra: [
-                "Dale, ya reviso el plano y te aviso.",
+                "Dale, ya reviso el plano and te aviso.",
                 "Mañana a primera hora cuadramos con el maestro.",
                 "Ya salieron los precios unitarios, te los paso en la tarde.",
                 "Quedo atento a la confirmación del proveedor.",
@@ -130,4 +132,127 @@
             ]
         };
 
-        let currentCategory = 'obra';
+        const ZW_ZERO = '\u200B';
+        const ZW_ONE = '\u200C';
+
+        window.onload = () => { renderFrases('obra'); };
+
+        function switchTab(tab) {
+            const tabCifrar = document.getElementById('btn-tab-cifrar');
+            const tabDescifrar = document.getElementById('btn-tab-descifrar');
+            const secCifrar = document.getElementById('section-cifrar');
+            const secDescifrar = document.getElementById('section-descifrar');
+
+            if (tab === 'cifrar') {
+                tabCifrar.className = "w-1/2 py-2.5 text-sm font-semibold rounded-lg bg-zinc-800 text-white transition shadow";
+                tabDescifrar.className = "w-1/2 py-2.5 text-sm font-semibold rounded-lg text-zinc-400 hover:text-white transition";
+                secCifrar.classList.remove('hidden');
+                secDescifrar.classList.add('hidden');
+            } else {
+                tabDescifrar.className = "w-1/2 py-2.5 text-sm font-semibold rounded-lg bg-zinc-800 text-white transition shadow";
+                tabCifrar.className = "w-1/2 py-2.5 text-sm font-semibold rounded-lg text-zinc-400 hover:text-white transition";
+                secDescifrar.classList.remove('hidden');
+                secCifrar.classList.add('hidden');
+            }
+        }
+
+        function renderFrases(categoria) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap";
+            });
+            document.getElementById(`cat-${categoria}`).className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap";
+
+            const container = document.getElementById('frases-container');
+            container.innerHTML = '';
+
+            FACHADAS_TEMAS[categoria].forEach(frase => {
+                const btn = document.createElement('button');
+                btn.onclick = () => ejecutarCamuflajeInvisible(frase);
+                btn.className = "w-full text-left bg-zinc-900 hover:bg-zinc-850 border border-zinc-800/80 rounded-lg p-3 text-xs text-zinc-300 transition active:scale-[0.99]";
+                btn.innerText = frase;
+                container.appendChild(btn);
+            });
+        }
+
+        function textToInvisible(text) {
+            return text.split('').map(char => {
+                const binary = char.charCodeAt(0).toString(2).padStart(8, '0');
+                return binary.split('').map(bit => bit === '0' ? ZW_ZERO : ZW_ONE).join('');
+            }).join('');
+        }
+
+        function invisibleToText(zwStr) {
+            let cleanBin = '';
+            for (let char of zwStr) {
+                if (char === ZW_ZERO) cleanBin += '0';
+                else if (char === ZW_ONE) cleanBin += '1';
+            }
+            if (!cleanBin) return '';
+            
+            const bytes = cleanBin.match(/.{1,8}/g) || [];
+            return bytes.map(byte => String.fromCharCode(parseInt(byte, 2))).join('');
+        }
+
+        function ejecutarCamuflajeInvisible(fraseFachada) {
+            const msgReal = document.getElementById('mensaje-real').value;
+            const password = document.getElementById('chat-password').value;
+
+            if(!msgReal || !password) return alert('Por favor ingresa primero el mensaje secreto y la contraseña del chat');
+
+            try {
+                const encrypted = CryptoJS.AES.encrypt(msgReal, password).toString();
+                const invisibleBlock = textToInvisible(encrypted);
+                const msgFinal = fraseFachada + invisibleBlock;
+
+                document.getElementById('resultado-cifrado-container').classList.remove('hidden');
+                document.getElementById('resultado-cifrado-texto').innerText = msgFinal;
+                document.getElementById('resultado-cifrado-container').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                alert('Error al generar el cifrado local.');
+                console.error(error);
+            }
+        }
+
+        function procesarDescifrado() {
+            const textoCamuflado = document.getElementById('texto-camuflado-input').value;
+            const password = document.getElementById('chat-password').value;
+
+            if(!textoCamuflado || !password) return alert('Ingresa el texto recibido y la contraseña del chat');
+
+            document.getElementById('resultado-descifrar-container').classList.remove('hidden');
+            document.getElementById('resultado-descifrar-texto').innerText = "Buscando marcas invisibles y descifrando...";
+
+            try {
+                const zwMatches = textoCamuflado.split('').filter(char => char === ZW_ZERO || char === ZW_ONE).join('');
+                
+                if (!zwMatches) {
+                    document.getElementById('resultado-descifrar-texto').innerText = "❌ No se encontraron datos ocultos invisibles en este texto.";
+                    return;
+                }
+
+                const encryptedBlock = invisibleToText(zwMatches);
+                const bytes = CryptoJS.AES.decrypt(encryptedBlock, password);
+                const mensajeOriginal = bytes.toString(CryptoJS.enc.Utf8);
+
+                if (!mensajeOriginal) {
+                    document.getElementById('resultado-descifrar-texto').innerText = "❌ Contraseña incorrecta o el mensaje sufrió daños al copiarse.";
+                } else {
+                    document.getElementById('resultado-descifrar-texto').innerText = mensajeOriginal;
+                }
+            } catch (error) {
+                document.getElementById('resultado-descifrar-texto').innerText = "❌ Error crítico al extraer los datos ocultos.";
+                console.error(error);
+            }
+        }
+
+        function copiarAlPortapapeles() {
+            const texto = document.getElementById('resultado-cifrado-texto').innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert('¡Mensaje copiado! Ya tiene el secreto invisible adentro.');
+            }).catch(err => {
+                alert('Error al copiar automáticamente.');
+            });
+        }
+    </script>
+</body>
+</html>
