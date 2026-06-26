@@ -20,10 +20,8 @@
     <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur sticky top-0 z-50">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <!-- Native Security SVG Logo -->
-                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                </svg>
+                <!-- Tu Logo Oficial Integrado -->
+                <img src="logo.png" alt="Logo COVERT" class="w-7 h-7 rounded-md object-cover border border-zinc-800/60 shadow-sm">
                 <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
             </div>
             <span class="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-zinc-700">v2.0 - Invisible</span>
@@ -108,7 +106,6 @@
     </footer>
 
     <script>
-        // English contextual templates for international users
         const FACHADAS_TEMAS = {
             work: [
                 "Sure, let me check the project files and get back to you.",
@@ -158,33 +155,33 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-    renderFrases('work');
-});
+            renderFrases('work');
+        });
 
-function renderFrases(categoria) {
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap";
-    });
-    
-    const targetBtn = document.getElementById(`cat-${categoria}`);
-    if (targetBtn) {
-        targetBtn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap";
-    }
-
-    const container = document.getElementById('frases-container');
-    if (container) {
-        container.innerHTML = '';
-        if (FACHADAS_TEMAS[categoria]) {
-            FACHADAS_TEMAS[categoria].forEach(frase => {
-                const btn = document.createElement('button');
-                btn.onclick = () => ejecutarCamuflajeInvisible(frase);
-                btn.className = "w-full text-left bg-zinc-900 hover:bg-zinc-850 border border-zinc-800/80 rounded-lg p-3 text-xs text-zinc-300 transition active:scale-[0.99]";
-                btn.innerText = frase;
-                container.appendChild(btn);
+        function renderFrases(categoria) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap";
             });
+            
+            const targetBtn = document.getElementById(`cat-${categoria}`);
+            if (targetBtn) {
+                targetBtn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap";
+            }
+
+            const container = document.getElementById('frases-container');
+            if (container) {
+                container.innerHTML = '';
+                if (FACHADAS_TEMAS[categoria]) {
+                    FACHADAS_TEMAS[categoria].forEach(frase => {
+                        const btn = document.createElement('button');
+                        btn.onclick = () => ejecutarCamuflajeInvisible(frase);
+                        btn.className = "w-full text-left bg-zinc-900 hover:bg-zinc-850 border border-zinc-800/80 rounded-lg p-3 text-xs text-zinc-300 transition active:scale-[0.99]";
+                        btn.innerText = frase;
+                        container.appendChild(btn);
+                    });
+                }
+            }
         }
-    }
-}
 
         function textToInvisible(text) {
             return text.split('').map(char => {
