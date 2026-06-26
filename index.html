@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +20,7 @@
     <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur sticky top-0 z-50">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <!-- Logo SVG de Seguridad Nativo -->
+                <!-- Native Security SVG Logo -->
                 <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                 </svg>
@@ -32,69 +32,69 @@
 
     <main class="flex-grow p-4 max-w-md mx-auto w-full space-y-5">
         
-        <!-- Tabs Principales -->
+        <!-- Main Tabs -->
         <div class="flex bg-zinc-900 p-1 rounded-xl border border-zinc-800">
             <button id="btn-tab-cifrar" class="w-1/2 py-2.5 text-sm font-semibold rounded-lg bg-zinc-800 text-white transition shadow" onclick="switchTab('cifrar')">
-                Ocultar Mensaje
+                Hide Message
             </button>
             <button id="btn-tab-descifrar" class="w-1/2 py-2.5 text-sm font-semibold rounded-lg text-zinc-400 hover:text-white transition" onclick="switchTab('descifrar')">
-                Revelar Mensaje
+                Reveal Message
             </button>
         </div>
 
-        <!-- Llave Compartida -->
+        <!-- Shared Secret Key -->
         <div class="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl space-y-1.5">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Contraseña del Chat (Llave Privada)</label>
-            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="Ej: clave_secreta_2026">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Chat Password (Private Key)</label>
+            <input id="chat-password" type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm focus:outline-none focus:border-zinc-600 text-zinc-300 font-mono" placeholder="e.g., project_secret_2026">
         </div>
 
-        <!-- SECCIÓN: OCULTAR -->
+        <!-- ENCRYPT SECTION -->
         <section id="section-cifrar" class="space-y-4">
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Mensaje Real y Secreto</label>
-                <textarea id="mensaje-real" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-700" placeholder="Escribe el mensaje confidencial aquí..."></textarea>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Real & Confidential Message</label>
+                <textarea id="mensaje-real" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-700" placeholder="Type the secret message here..."></textarea>
             </div>
 
-            <!-- Selector Rápido de Categorías Móvil -->
+            <!-- Mobile Category Quick Selector -->
             <div class="space-y-2">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Selecciona Frase de Fachada</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Select Cover Text Template</label>
                 <div class="flex space-x-1.5 bg-zinc-900 p-1 rounded-lg border border-zinc-800 overflow-x-auto">
-                    <button onclick="renderFrases('obra')" id="cat-obra" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap">🏗️ Obra</button>
-                    <button onclick="renderFrases('logistica')" id="cat-logistica" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🚗 Camino</button>
-                    <button onclick="renderFrases('cotidiano')" id="cat-cotidiano" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🛒 Cotidiano</button>
+                    <button onclick="renderFrases('work')" id="cat-work" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap">🏗️ Work</button>
+                    <button onclick="renderFrases('transit')" id="cat-transit" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🚗 Transit</button>
+                    <button onclick="renderFrases('casual')" id="cat-casual" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🛒 Casual</button>
                 </div>
                 
-                <!-- Contenedor Dinámico de Frases Rápidas -->
+                <!-- Dynamic Quick Phrases Container -->
                 <div id="frases-container" class="grid grid-cols-1 gap-2 pt-1 max-h-48 overflow-y-auto">
-                    <!-- Inyectado por JS -->
+                    <!-- Injected by JS -->
                 </div>
             </div>
 
-            <!-- Contenedor del Resultado -->
+            <!-- Output Container -->
             <div id="resultado-cifrado-container" class="hidden space-y-2 pt-2">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Texto generado (El secreto ya está invisible adentro)</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Generated Text (Secret is now invisibly hidden inside)</label>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 space-y-3">
                     <p id="resultado-cifrado-texto" class="bg-zinc-950 p-3 rounded-lg border border-zinc-800 text-sm text-zinc-300 break-words font-sans"></p>
                     <button onclick="copiarAlPortapapeles()" class="w-full bg-white text-black font-bold text-xs py-2.5 rounded-lg hover:bg-zinc-200 transition shadow">
-                        Copiar Mensaje Listo para WhatsApp
+                        Copy Message Ready for Chat
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN: REVELAR -->
+        <!-- DECRYPT SECTION -->
         <section id="section-descifrar" class="hidden space-y-4">
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Pegar Mensaje de WhatsApp</label>
-                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-700" placeholder="Pega el texto de la fachada tal cual como llegó..."></textarea>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Paste Chat Message</label>
+                <textarea id="texto-camuflado-input" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm focus:outline-none focus:border-zinc-600 resize-none placeholder-zinc-700" placeholder="Paste the cover text exactly as received..."></textarea>
             </div>
 
             <button onclick="procesarDescifrado()" class="w-full bg-zinc-800 text-white font-semibold text-sm py-3 rounded-xl hover:bg-zinc-700 border border-zinc-700 transition">
-                Extraer y Revelar Mensaje Oculto
+                Extract & Reveal Hidden Message
             </button>
 
             <div id="resultado-descifrar-container" class="hidden space-y-2 pt-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-emerald-500">⚠️ MENSAJE REVELADO</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-emerald-500">⚠️ DECRYPTED MESSAGE</label>
                 <div class="bg-emerald-950/20 border border-emerald-900/40 rounded-xl p-4 text-sm text-emerald-400 break-words">
                     <p id="resultado-descifrar-texto" class="font-medium tracking-wide"></p>
                 </div>
@@ -104,38 +104,39 @@
     </main>
 
     <footer class="p-4 text-center text-zinc-600 text-[10px] border-t border-zinc-900 tracking-wider uppercase">
-        Covert Labs v2.0 &bull; Cifrado Criptográfico Esteganográfico Local Activo
+        Covert Labs v2.0 &bull; Local Cryptographic Steganography Active
     </footer>
 
     <script>
+        // English contextual templates for international users
         const FACHADAS_TEMAS = {
-            obra: [
-                "Dale, ya reviso el plano and te aviso.",
-                "Mañana a primera hora cuadramos con el maestro.",
-                "Ya salieron los precios unitarios, te los paso en la tarde.",
-                "Quedo atento a la confirmación del proveedor.",
-                "Ya voy saliendo para la visita técnica."
+            work: [
+                "Sure, let me check the project files and get back to you.",
+                "We will coordinate with the team first thing tomorrow morning.",
+                "The cost estimates are ready, I will send them over this afternoon.",
+                "I am waiting for confirmation from the main supplier.",
+                "Heading out right now for the site technical review."
             ],
-            logistica: [
-                "Ya voy llegando al sitio.",
-                "Qué pena la demora, me agarró el trancón de siempre.",
-                "Voy manejando, apenas llegue te pego una timbrada.",
-                "Ya pasé por el punto, todo normal.",
-                "Voy en camino, nos vemos en 15."
+            transit: [
+                "Just arriving at the location now.",
+                "Sorry for the delay, got caught in heavy traffic.",
+                "Driving right now, will give you a call as soon as I arrive.",
+                "Just passed the main checkpoint, everything looks clear.",
+                "On my way, see you there in about 15 minutes."
             ],
-            cotidiano: [
-                "Listo, ya voy para allá con el pan y la leche.",
-                "Dale, nos vemos allá más tarde.",
-                "Ok, anotado.",
-                "Ya almorcé, voy de salida.",
-                "¿Al fin qué hacemos con lo de la cena?"
+            casual: [
+                "Sounds good, I am picking up some milk and bread on my way.",
+                "Alright, let's meet up there a bit later.",
+                "Okay, noted.",
+                "Just finished lunch, heading out now.",
+                "What's the plan for dinner tonight?"
             ]
         };
 
         const ZW_ZERO = '\u200B';
         const ZW_ONE = '\u200C';
 
-        window.onload = () => { renderFrases('obra'); };
+        window.onload = () => { renderFrases('work'); };
 
         function switchTab(tab) {
             const tabCifrar = document.getElementById('btn-tab-cifrar');
@@ -156,15 +157,24 @@
             }
         }
 
-        function renderFrases(categoria) {
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap";
-            });
-            document.getElementById(`cat-${categoria}`).className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap";
+        document.addEventListener('DOMContentLoaded', () => {
+    renderFrases('work');
+});
 
-            const container = document.getElementById('frases-container');
-            container.innerHTML = '';
+function renderFrases(categoria) {
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap";
+    });
+    
+    const targetBtn = document.getElementById(`cat-${categoria}`);
+    if (targetBtn) {
+        targetBtn.className = "cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md bg-zinc-800 text-white whitespace-nowrap";
+    }
 
+    const container = document.getElementById('frases-container');
+    if (container) {
+        container.innerHTML = '';
+        if (FACHADAS_TEMAS[categoria]) {
             FACHADAS_TEMAS[categoria].forEach(frase => {
                 const btn = document.createElement('button');
                 btn.onclick = () => ejecutarCamuflajeInvisible(frase);
@@ -173,6 +183,8 @@
                 container.appendChild(btn);
             });
         }
+    }
+}
 
         function textToInvisible(text) {
             return text.split('').map(char => {
@@ -197,7 +209,7 @@
             const msgReal = document.getElementById('mensaje-real').value;
             const password = document.getElementById('chat-password').value;
 
-            if(!msgReal || !password) return alert('Por favor ingresa primero el mensaje secreto y la contraseña del chat');
+            if(!msgReal || !password) return alert('Please enter both the secret message and the chat password first');
 
             try {
                 const encrypted = CryptoJS.AES.encrypt(msgReal, password).toString();
@@ -208,7 +220,7 @@
                 document.getElementById('resultado-cifrado-texto').innerText = msgFinal;
                 document.getElementById('resultado-cifrado-container').scrollIntoView({ behavior: 'smooth' });
             } catch (error) {
-                alert('Error al generar el cifrado local.');
+                alert('Error generating local encryption.');
                 console.error(error);
             }
         }
@@ -217,16 +229,16 @@
             const textoCamuflado = document.getElementById('texto-camuflado-input').value;
             const password = document.getElementById('chat-password').value;
 
-            if(!textoCamuflado || !password) return alert('Ingresa el texto recibido y la contraseña del chat');
+            if(!textoCamuflado || !password) return alert('Please enter the received text and the chat password');
 
             document.getElementById('resultado-descifrar-container').classList.remove('hidden');
-            document.getElementById('resultado-descifrar-texto').innerText = "Buscando marcas invisibles y descifrando...";
+            document.getElementById('resultado-descifrar-texto').innerText = "Scanning invisible marks and decrypting...";
 
             try {
                 const zwMatches = textoCamuflado.split('').filter(char => char === ZW_ZERO || char === ZW_ONE).join('');
                 
                 if (!zwMatches) {
-                    document.getElementById('resultado-descifrar-texto').innerText = "❌ No se encontraron datos ocultos invisibles en este texto.";
+                    document.getElementById('resultado-descifrar-texto').innerText = "❌ No invisible hidden data was found in this text.";
                     return;
                 }
 
@@ -235,12 +247,12 @@
                 const mensajeOriginal = bytes.toString(CryptoJS.enc.Utf8);
 
                 if (!mensajeOriginal) {
-                    document.getElementById('resultado-descifrar-texto').innerText = "❌ Contraseña incorrecta o el mensaje sufrió daños al copiarse.";
+                    document.getElementById('resultado-descifrar-texto').innerText = "❌ Incorrect password or corrupted data block.";
                 } else {
                     document.getElementById('resultado-descifrar-texto').innerText = mensajeOriginal;
                 }
             } catch (error) {
-                document.getElementById('resultado-descifrar-texto').innerText = "❌ Error crítico al extraer los datos ocultos.";
+                document.getElementById('resultado-descifrar-texto').innerText = "❌ Critical error extracting hidden data.";
                 console.error(error);
             }
         }
@@ -248,9 +260,9 @@
         function copiarAlPortapapeles() {
             const texto = document.getElementById('resultado-cifrado-texto').innerText;
             navigator.clipboard.writeText(texto).then(() => {
-                alert('¡Mensaje copiado! Ya tiene el secreto invisible adentro.');
+                alert('Message copied! The secret is invisibly embedded.');
             }).catch(err => {
-                alert('Error al copiar automáticamente.');
+                alert('Error copying text automatically.');
             });
         }
     </script>
