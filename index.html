@@ -26,6 +26,7 @@
     <header class="border-b border-zinc-800 p-4 bg-zinc-900/50 backdrop-blur sticky top-0 z-50">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
+                <!-- Tu Logo Oficial Integrado -->
                 <img src="logo.png" alt="Logo COVERT" class="w-7 h-7 rounded-md object-cover border border-zinc-800/60 shadow-sm">
                 <h1 class="text-xl font-black tracking-wider text-white">COVERT</h1>
             </div>
@@ -67,6 +68,7 @@
                     <button onclick="renderFrases('casual')" id="cat-casual" class="cat-btn flex-1 py-1.5 px-3 text-xs font-medium rounded-md text-zinc-400 hover:text-white whitespace-nowrap">🛒 Casual</button>
                 </div>
                 
+                <!-- Dynamic Quick Phrases Container -->
                 <div id="frases-container" class="grid grid-cols-1 gap-2 pt-1 max-h-48 overflow-y-auto">
                     <!-- Injected by JS -->
                 </div>
@@ -134,12 +136,8 @@
             ]
         };
 
-        // Marcadores híbridos alternativos compatibles con el parser de WhatsApp
-        // Usamos combinaciones de espacios y el separador de línea invisible \u2028 que WhatsApp respeta
-        const ZW_ZERO = '\u2028'; 
-        const ZW_ONE = '\u2029';
-        const ALT_ZERO = '\u206A';
-        const ALT_ONE = '\u206B';
+        const ZW_ZERO = '\u200B';
+        const ZW_ONE = '\u200C';
 
         window.onload = () => { renderFrases('work'); };
 
@@ -201,8 +199,8 @@
         function invisibleToText(zwStr) {
             let cleanBin = '';
             for (let char of zwStr) {
-                if (char === ZW_ZERO || char === ALT_ZERO) cleanBin += '0';
-                else if (char === ZW_ONE || char === ALT_ONE) cleanBin += '1';
+                if (char === ZW_ZERO) cleanBin += '0';
+                else if (char === ZW_ONE) cleanBin += '1';
             }
             if (!cleanBin) return '';
             
@@ -219,8 +217,7 @@
             try {
                 const encrypted = CryptoJS.AES.encrypt(msgReal, password).toString();
                 const invisibleBlock = textToInvisible(encrypted);
-                // Inyectamos un punto imperceptible de quiebre que obliga a WA a respetar el bloque de texto
-                const msgFinal = fraseFachada + " " + invisibleBlock;
+                const msgFinal = fraseFachada + invisibleBlock;
 
                 document.getElementById('resultado-cifrado-container').classList.remove('hidden');
                 document.getElementById('resultado-cifrado-texto').innerText = msgFinal;
@@ -232,7 +229,7 @@
         }
 
         function procesarDescifrado() {
-            let textoCamuflado = document.getElementById('texto-camuflado-input').value;
+            const textoCamuflado = document.getElementById('texto-camuflado-input').value;
             const password = document.getElementById('chat-password').value;
 
             if(!textoCamuflado || !password) return alert('Please enter the received text and the chat password');
@@ -241,11 +238,7 @@
             document.getElementById('resultado-descifrar-texto').innerText = "Scanning invisible marks and decrypting...";
 
             try {
-                // Captura todos los posibles marcadores invisibles supervivientes de la transmisión
-                const zwMatches = textoCamuflado.split('').filter(char => 
-                    char === ZW_ZERO || char === ZW_ONE || char === ALT_ZERO || char === ALT_ONE || 
-                    char === '\u200B' || char === '\u200C'
-                ).join('');
+                const zwMatches = textoCamuflado.split('').filter(char => char === ZW_ZERO || char === ZW_ONE).join('');
                 
                 if (!zwMatches) {
                     document.getElementById('resultado-descifrar-texto').innerText = "❌ No invisible hidden data was found in this text.";
