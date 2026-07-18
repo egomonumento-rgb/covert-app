@@ -14,6 +14,28 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <!-- Vercel Speed Insights -->
+    <script>
+        (function() {
+            if (window.si) return;
+            window.si = function() {
+                (window.siq = window.siq || []).push(arguments);
+            };
+            
+            var script = document.createElement('script');
+            script.src = '/_vercel/speed-insights/script.js';
+            script.defer = true;
+            script.dataset.sdkn = '@vercel/speed-insights';
+            script.dataset.sdkv = '2.0.0';
+            
+            script.onerror = function() {
+                console.log('[Vercel Speed Insights] Failed to load script. Please check if any content blockers are enabled.');
+            };
+            
+            document.head.appendChild(script);
+        })();
+    </script>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between font-sans selection:bg-zinc-700">
 
