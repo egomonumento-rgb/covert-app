@@ -1,0 +1,18 @@
+{
+  "name": "covert-app",
+  "version": "2.0.0",
+  "description": "Covert - Invisible Messaging",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "steganography",
+    "encryption",
+    "messaging"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
