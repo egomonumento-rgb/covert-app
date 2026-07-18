@@ -1,0 +1,23 @@
+{
+  "name": "covert-app",
+  "version": "2.0.0",
+  "description": "Covert - Invisible Messaging App with Steganography",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egomonumento-rgb/covert-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/egomonumento-rgb/covert-app/issues"
+  },
+  "homepage": "https://github.com/egomonumento-rgb/covert-app#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
