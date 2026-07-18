@@ -19,7 +19,7 @@
     <script>
         window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="https://va.vercel.clerk.com/v1/script.debug.js"></script>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between font-sans selection:bg-zinc-700">
 
@@ -136,8 +136,9 @@
             ]
         };
 
-        const ZW_ZERO = '\u200B';
-        const ZW_ONE = '\u200C';
+        // Cambiados por marcadores de control bidireccional blindados para WhatsApp
+        const ZW_ZERO = '\u206A'; 
+        const ZW_ONE = '\u206B';
 
         window.onload = () => { renderFrases('work'); };
 
